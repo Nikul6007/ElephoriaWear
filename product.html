@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boxy Fit Core Tee | ELEPHORIA WEAR</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+</head>
+<body>
+
+   
+    <!-- Main Content -->
+    <main class="pt-5 mt-5">
+        
+        <!-- Breadcrumbs -->
+        <div class="container mt-4 mb-3">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0 small">
+                    <li class="breadcrumb-item"><a href="index.html" class="text-gray-dark text-decoration-none">Home</a></li>
+                    <li class="breadcrumb-item"><a href="shop.html" class="text-gray-dark text-decoration-none">Shop</a></li>
+                    <li class="breadcrumb-item"><a href="#" class="text-gray-dark text-decoration-none">T-Shirts</a></li>
+                    <li class="breadcrumb-item active text-dark fw-bold" aria-current="page">Boxy Fit Core Tee</li>
+                </ol>
+            </nav>
+        </div>
+
+        <section class="container mb-5 pb-5">
+            <div class="row gx-5">
+                <!-- Product Images -->
+                <div class="col-lg-7 mb-5 mb-lg-0">
+                    <div class="row g-2">
+                        <!-- Main Image -->
+                        <div class="col-12 mb-2">
+                            <div class="bg-light position-relative">
+                                <img src="https://images.unsplash.com/photo-1576566588028-4147f3842f27?q=80&w=1528&auto=format&fit=crop" class="img-fluid w-100 object-fit-cover" style="height: 600px;" alt="Boxy Fit Core Tee Main">
+                            </div>
+                        </div>
+                        <!-- Thumbs -->
+                        <div class="col-6">
+                            <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=1780&auto=format&fit=crop" class="img-fluid w-100 object-fit-cover" style="height: 300px;" alt="Detail 1">
+                        </div>
+                        <div class="col-6">
+                            <img src="https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?q=80&w=2670&auto=format&fit=crop" class="img-fluid w-100 object-fit-cover" style="height: 300px;" alt="Detail 2">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Product Details -->
+                <div class="col-lg-5">
+                    <div class="sticky-top" style="top: 100px;">
+                        <span class="text-gold fw-bold text-uppercase small tracking-wider mb-2 d-inline-block">Core Collection</span>
+                        <h1 class="display-5 fw-bold text-uppercase mb-2">Boxy Fit Core Tee</h1>
+                        <p class="fs-4 mb-4">₹450.00</p>
+                        
+                        <p class="text-gray-dark mb-4">Our signature boxy fit t-shirt. Crafted from heavyweight 240gsm cotton for a structured drape. Dropped shoulders, wide body, slightly cropped length. The perfect blank canvas.</p>
+                        
+                        <!-- Color Selection -->
+                        <div class="mb-4">
+                            <h6 class="text-uppercase fw-bold small mb-2">Color: <span class="text-gray-dark fw-normal">Washed Black</span></h6>
+                            <div class="d-flex gap-2">
+                                <button class="btn p-0 border border-dark rounded-circle border-2" style="width: 32px; height: 32px;"><span class="d-block w-100 h-100 rounded-circle border border-white" style="background-color: #222;"></span></button>
+                                <button class="btn p-0 border border-transparent rounded-circle border-2" style="width: 32px; height: 32px;"><span class="d-block w-100 h-100 rounded-circle border border-white" style="background-color: #f5f5f5;"></span></button>
+                                <button class="btn p-0 border border-transparent rounded-circle border-2" style="width: 32px; height: 32px;"><span class="d-block w-100 h-100 rounded-circle border border-white" style="background-color: #e8dcc6;"></span></button>
+                            </div>
+                        </div>
+                        
+                        <!-- Size Selection -->
+                        <div class="mb-4">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <h6 class="text-uppercase fw-bold small m-0">Size</h6>
+                                <a href="#" class="text-decoration-underline text-dark small">Size Guide</a>
+                            </div>
+                            <div class="d-flex flex-wrap gap-2">
+                                <input type="radio" class="btn-check" name="options" id="sizeS" autocomplete="off">
+                                <label class="btn btn-outline-dark rounded-0 px-4 py-2" for="sizeS">S</label>
+
+                                <input type="radio" class="btn-check" name="options" id="sizeM" autocomplete="off" checked>
+                                <label class="btn btn-outline-dark rounded-0 px-4 py-2" for="sizeM">M</label>
+
+                                <input type="radio" class="btn-check" name="options" id="sizeL" autocomplete="off">
+                                <label class="btn btn-outline-dark rounded-0 px-4 py-2" for="sizeL">L</label>
+
+                                <input type="radio" class="btn-check" name="options" id="sizeXL" autocomplete="off">
+                                <label class="btn btn-outline-dark rounded-0 px-4 py-2" for="sizeXL">XL</label>
+                            </div>
+                        </div>
+                        
+                        <!-- Actions -->
+                        <div class="d-flex gap-3 mb-4">
+                            <!-- Quantity -->
+                            <div class="input-group w-auto border border-dark">
+                                <button class="btn btn-transparent rounded-0 text-dark fw-bold border-0 px-3" type="button" onclick="document.getElementById('qty').value = Math.max(1, parseInt(document.getElementById('qty').value) - 1)">-</button>
+                                <input type="number" id="qty" class="form-control text-center bg-transparent border-0 text-dark fw-bold" value="1" min="1" style="width: 50px;">
+                                <button class="btn btn-transparent rounded-0 text-dark fw-bold border-0 px-3" type="button" onclick="document.getElementById('qty').value = parseInt(document.getElementById('qty').value) + 1">+</button>
+                            </div>
+                            <!-- Add to cart -->
+                            <button class="btn btn-elephoria flex-grow-1 btn-add-cart" id="mainAddToCart" data-id="1" data-name="Boxy Fit Core Tee" data-price="45.00">Add to Cart</button>
+                        </div>
+                        
+                        <!-- Custom Print Upsell -->
+                        <div class="bg-beige p-3 mb-4 border border-dark border-opacity-25 d-flex align-items-center justify-content-between">
+                            <div>
+                                <h6 class="fw-bold mb-1 text-uppercase text-dark small"><i class="bi bi-brush me-2 text-gold"></i>Make it yours</h6>
+                                <p class="small mb-0 text-dark opacity-75">Add custom graphics to this blank.</p>
+                            </div>
+                            <a href="customize.html" class="btn btn-outline-dark btn-sm rounded-0">Customize</a>
+                        </div>
+                        
+                        <!-- Accordion Specs -->
+                        <div class="accordion accordion-flush mt-4 border-top border-dark" id="productSpecs">
+                            <div class="accordion-item bg-transparent border-dark">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button bg-transparent text-dark fw-bold text-uppercase px-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
+                                        Details & Fit
+                                    </button>
+                                </h2>
+                                <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#productSpecs">
+                                    <div class="accordion-body px-0 text-gray-dark small">
+                                        <ul>
+                                            <li>100% Organic Cotton</li>
+                                            <li>Heavyweight 240 GSM</li>
+                                            <li>Pre-shrunk to minimize shrinkage</li>
+                                            <li>Garment dyed for vintage feel</li>
+                                            <li>Model is 6'1" wearing size L</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item bg-transparent border-dark border-bottom">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed bg-transparent text-dark fw-bold text-uppercase px-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo">
+                                        Shipping & Returns
+                                    </button>
+                                </h2>
+                                <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#productSpecs">
+                                    <div class="accordion-body px-0 text-gray-dark small">
+                                        Free standard shipping on orders over $100. Returns accepted within 14 days of delivery.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Related Products -->
+        <section class="bg-light py-5 border-top border-dark">
+            <div class="container">
+                <h3 class="text-center text-uppercase fw-bold mb-5">Complete the Look</h3>
+                <div class="row">
+                    <!-- Related 1 -->
+                    <div class="col-6 col-md-3">
+                        <div class="product-card">
+                            <div class="image-wrapper">
+                                <a href="product.html">
+                                    <img src="https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?q=80&w=987&auto=format&fit=crop" alt="Product">
+                                </a>
+                                <div class="overlay">
+                                    <button class="btn btn-light rounded-0 w-100 fw-bold btn-add-cart" data-id="4" data-name="Skeleton LS" data-price="600.00">Quick Add</button>
+                                </div>
+                            </div>
+                            <div class="product-info text-center">
+                                <h4 class="product-title fs-6"><a href="product.html">Skeleton Print LS</a></h4>
+                                <div class="product-price small">₹600.00</div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+                
+            </div>
+        </section>
+
+    </main>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="main.js"></script>
+    <script>
+        // Specific script for product page to handle quantity add
+        document.getElementById('mainAddToCart').addEventListener('click', function(e) {
+            e.preventDefault();
+            const qty = parseInt(document.getElementById('qty').value);
+            // main.js btn-add-cart listener handles the base logic, but we might want to override to add quantity.
+            // Since main.js already runs, we'll let it handle the first one, then fix quantity
+            let cart = JSON.parse(localStorage.getItem('elephoria_cart')) || [];
+            const existingIndex = cart.findIndex(item => item.id === this.getAttribute('data-id'));
+            
+            // Adjust because main.js added 1, so we add (qty - 1)
+            if (qty > 1 && existingIndex > -1) {
+                cart[existingIndex].quantity += (qty - 1);
+                localStorage.setItem('elephoria_cart', JSON.stringify(cart));
+                // Reload badge
+                document.getElementById('cartBadgeCount').innerText = cart.reduce((sum, item) => sum + item.quantity, 0);
+            }
+        });
+    </script>
+</body>
+</html>

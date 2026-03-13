@@ -1,0 +1,362 @@
+/* 
+ * ELEPHORIA WEAR - Global Styles
+ * Theme: Black, White, Beige/Gold
+ * Typography: Outfit (Google Fonts)
+ */
+
+:root {
+  /* Color Palette */
+  --color-black: #0a0a0a;
+  --color-white: #ffffff;
+  --color-beige: #e8dcc6;
+  --color-gold: #c5a880;
+  --color-gray-light: #f4f4f4;
+  --color-gray-dark: #4c4a4a;
+
+  /* Typography */
+  --font-primary: 'Outfit', sans-serif;
+  
+  /* Utilities */
+  --transition-fast: 0.2s ease;
+  --transition-normal: 0.4s ease-in-out;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 16px;
+}
+
+/* Base Reset & Typography */
+body {
+  font-family: var(--font-primary);
+  background-color: var(--color-white);
+  color: var(--color-black);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+
+p {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--color-gray-dark);
+}
+
+a {
+  color: var(--color-black);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: var(--color-gold);
+}
+
+/* Custom Buttons */
+.btn-elephoria {
+  background-color: var(--color-black);
+  color: var(--color-white);
+  padding: 12px 32px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: 1px solid var(--color-black);
+  border-radius: 0;
+  transition: all var(--transition-fast);
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.btn-elephoria::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--color-white);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform var(--transition-normal);
+  z-index: -1;
+}
+
+.btn-elephoria:hover {
+  color: var(--color-black);
+  border-color: var(--color-black);
+}
+
+.btn-elephoria:hover::before {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.btn-elephoria-outline {
+  background-color: transparent;
+  color: var(--color-black);
+  border: 1px solid var(--color-black);
+  padding: 12px 32px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-radius: 0;
+  transition: all var(--transition-fast);
+}
+
+.btn-elephoria-outline:hover {
+  background-color: var(--color-black);
+  color: var(--color-white);
+}
+
+/* Navbar Customization */
+.navbar {
+  padding: 1.5rem 0;
+  background-color: var(--color-white);
+  transition: all var(--transition-fast);
+  border-bottom: 1px solid transparent;
+}
+
+.navbar.scrolled {
+  padding: 1rem 0;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  border-bottom: 1px solid var(--color-gray-light);
+}
+
+.navbar-brand {
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+}
+
+.nav-link {
+  font-weight: 500;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  letter-spacing: 0.05em;
+  margin: 0 10px;
+  position: relative;
+}
+
+.nav-link::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: 0;
+  left: 50%;
+  background-color: var(--color-gold);
+  transition: all var(--transition-fast);
+  transform: translateX(-50%);
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+  width: 100%;
+}
+
+/* Cart Icon Badge */
+.cart-badge {
+  position: absolute;
+  top: -5px;
+  right: -10px;
+  background-color: var(--color-gold);
+  color: var(--color-white);
+  font-size: 0.7rem;
+  padding: 2px 6px;
+  border-radius: 50%;
+  font-weight: 700;
+}
+
+/* Product Cards */
+.product-card {
+  border: none;
+  border-radius: 0;
+  overflow: hidden;
+  margin-bottom: 2rem;
+  transition: transform var(--transition-normal);
+}
+
+.product-card .image-wrapper {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 3/4;
+  background-color: var(--color-gray-light);
+}
+
+.product-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--transition-normal);
+}
+
+.product-card:hover img {
+  transform: scale(1.05);
+}
+
+.product-card .overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.2);
+  opacity: 0;
+  transition: opacity var(--transition-normal);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 20px;
+}
+
+.product-card:hover .overlay {
+  opacity: 1;
+}
+
+.product-info {
+  padding: 1rem 0;
+}
+
+.product-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+}
+
+.product-price {
+  font-size: 1rem;
+  color: var(--color-gray-dark);
+  font-weight: 500;
+}
+
+/* Footer */
+footer {
+  background-color: var(--color-black);
+  color: var(--color-white);
+  padding: 4rem 0 2rem;
+}
+
+footer a {
+  color: var(--color-gray-light);
+}
+
+footer a:hover {
+  color: var(--color-gold);
+}
+
+.footer-title {
+  color: var(--color-white);
+  font-size: 1.2rem;
+  margin-bottom: 1.5rem;
+}
+
+.social-links a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--color-gray-dark);
+  border-radius: 50%;
+  margin-right: 10px;
+  transition: all var(--transition-fast);
+}
+
+.social-links a:hover {
+  background-color: var(--color-gold);
+  border-color: var(--color-gold);
+  color: var(--color-white);
+}
+
+/* Utility Classes */
+.bg-beige {
+  background-color: var(--color-beige);
+}
+
+.text-gold {
+  color: var(--color-gold);
+}
+
+.section-padding {
+  padding: 5rem 0;
+}
+
+.min-vh-80 {
+  min-height: 80vh;
+}
+.bts-video-section {
+    height: 60vh; /* Tamari pasand mujab height set karo */
+    background-color: var(--color-black);
+}
+
+.bts-video-bg {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    z-index: 0;
+    transform: translate(-50%, -50%);
+    object-fit: cover;
+}
+
+.bts-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6); /* Video ne thodo dark karva mate */
+    z-index: 1;
+}
+
+.tracking-widest {
+    letter-spacing: 0.3em;
+}
+
+/* WhatsApp Official Style Button */
+.whatsapp-btn-container {
+    background-color: #25d366;
+    color: #ffffff !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px 32px;
+    border-radius: 50px; /* Official rounded look */
+    text-decoration: none !important;
+    font-weight: 600;
+    font-size: 1.1rem;
+    letter-spacing: 0.5px;
+    transition: all 0.3s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+    box-shadow: 0 4px 12px rgba(37, 211, 102, 0.4);
+    border: none;
+    position: relative;
+    overflow: hidden;
+    animation: whatsapp-pulse 2s infinite; /* Continuous Attention Pulse */
+}
+
+.whatsapp-btn-container:hover {
+    background-color: #128c7e;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(37, 211, 102, 0.6);
+}
+
+/* Official Pulse Animation */
+@keyframes whatsapp-pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 15px rgba(37, 211, 102, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
+    }
+}

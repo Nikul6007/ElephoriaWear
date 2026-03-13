@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customize Your T-Shirt | ELEPHORIA WEAR</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+    <style>
+        /* Customizer Tool styles */
+        .canvas-container {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 3/4;
+            background-color: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        .tshirt-mockup {
+            width: 80%;
+            height: 80%;
+            object-fit: contain;
+            z-index: 1;
+            transition: all 0.3s ease;
+        }
+        
+        .print-area {
+            position: absolute;
+            top: 30%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 35%;
+            height: 45%;
+            border: 2px dashed rgba(0,0,0,0.2);
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        .print-preview {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+    </style>
+</head>
+<body>
+
+   
+    <!-- Main Content -->
+    <main class="pt-5 mt-5">
+        
+        <header class="bg-black text-white py-5 mb-5">
+            <div class="container text-center">
+                <h1 class="display-4 fw-bold text-uppercase">Design Lab</h1>
+                <p class="lead text-gray-light">Your vision on our premium blanks.</p>
+            </div>
+        </header>
+
+        <section class="container mb-5 pb-5">
+            <div class="row gx-5">
+                
+                <!-- Mockup Area -->
+                <div class="col-lg-7 mb-4 mb-lg-0">
+                    <div class="sticky-top" style="top: 100px;">
+                        <div class="canvas-container shadow-sm border border-light">
+                            <!-- Base T-Shirt Image -->
+                            <!-- Using a placeholder white shirt that we can tint with CSS filters if needed, but for dummy we just keep it white/black -->
+                            <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=1780&auto=format&fit=crop" id="shirtMockup" class="tshirt-mockup" alt="T-Shirt Base">
+                            
+                            <!-- The printable boundary -->
+                            <div class="print-area" id="printArea">
+                                <span class="text-muted small fw-bold opacity-50 text-center" id="printHint">YOUR DESIGN HERE<br><small>(300x400px)</small></span>
+                                <img src="" id="printPreview" class="print-preview d-none" alt="Custom Graphic">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Controls Area -->
+                <div class="col-lg-5">
+                    <h2 class="h3 fw-bold text-uppercase mb-4">Customize</h2>
+                    
+                    <!-- Step 1: Blank Selection -->
+                    <div class="mb-5">
+                        <h4 class="h5 fw-bold text-uppercase border-bottom border-dark pb-2 mb-3">1. Select Blank</h4>
+                        <div class="d-flex gap-3 mb-3">
+                            <button class="btn btn-outline-dark rounded-0 px-4 active">T-Shirt (₹450)</button>
+                            <button class="btn btn-outline-dark rounded-0 px-4">Hoodie (₹650)</button>
+                        </div>
+                        
+                        <p class="fw-bold small mb-2 text-uppercase">Color</p>
+                        <div class="d-flex gap-2">
+                            <button class="btn p-0 border border-dark rounded-circle border-2" style="width: 32px; height: 32px;" onclick="document.getElementById('shirtMockup').style.filter = 'brightness(0.2)'"><span class="d-block w-100 h-100 rounded-circle border border-white" style="background-color: #222;"></span></button>
+                            <button class="btn p-0 border border-dark rounded-circle border-2" style="width: 32px; height: 32px;" onclick="document.getElementById('shirtMockup').style.filter = 'brightness(1)'"><span class="d-block w-100 h-100 rounded-circle border border-white" style="background-color: #f5f5f5;"></span></button>
+                            <button class="btn p-0 border border-dark rounded-circle border-2" style="width: 32px; height: 32px;" onclick="document.getElementById('shirtMockup').style.filter = 'sepia(0.3) hue-rotate(320deg) brightness(0.9)'"><span class="d-block w-100 h-100 rounded-circle border border-white" style="background-color: #e8dcc6;"></span></button>
+                        </div>
+                    </div>
+                    
+                    <!-- Step 2: Upload Artwork -->
+                    <div class="mb-5">
+                        <h4 class="h5 fw-bold text-uppercase border-bottom border-dark pb-2 mb-3">2. Artwork</h4>
+                        
+                        <div class="bg-light p-4 text-center border border-dashed border-dark cursor-pointer mb-3" onclick="document.getElementById('fileUpload').click()">
+                            <i class="bi bi-cloud-arrow-up display-4 text-dark mb-2"></i>
+                            <h5 class="text-uppercase fw-bold">Upload Graphic</h5>
+                            <p class="small text-gray-dark mb-0">PNG, JPG up to 10MB. Use transparent background for best results.</p>
+                            <input type="file" id="fileUpload" class="d-none" accept="image/*">
+                        </div>
+                        
+                        <!-- Simple JS to handle upload preview -->
+                        <script>
+                            document.getElementById('fileUpload').addEventListener('change', function(e) {
+                                const file = e.target.files[0];
+                                if(file) {
+                                    const reader = new FileReader();
+                                    reader.onload = function(e) {
+                                        const preview = document.getElementById('printPreview');
+                                        const hint = document.getElementById('printHint');
+                                        preview.src = e.target.result;
+                                        preview.classList.remove('d-none');
+                                        hint.classList.add('d-none');
+                                    }
+                                    reader.readAsDataURL(file);
+                                }
+                            });
+                        </script>
+                        
+                        <div class="mb-3">
+                            <label class="form-label fw-bold small text-uppercase">Or Add Text</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control rounded-0 border-dark shadow-none" placeholder="Enter text...">
+                                <button class="btn btn-dark rounded-0 fw-bold">ADD</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Step 3: Size & Add to Cart -->
+                    <div class="mb-4">
+                        <h4 class="h5 fw-bold text-uppercase border-bottom border-dark pb-2 mb-3">3. Size & Details</h4>
+                        
+                        <div class="mb-4">
+                            <p class="fw-bold small mb-2 text-uppercase">Size</p>
+                            <div class="d-flex flex-wrap gap-2">
+                                <input type="radio" class="btn-check" name="size" id="s1" autocomplete="off">
+                                <label class="btn btn-outline-dark rounded-0 px-3 py-1" for="s1">S</label>
+
+                                <input type="radio" class="btn-check" name="size" id="s2" autocomplete="off" checked>
+                                <label class="btn btn-outline-dark rounded-0 px-3 py-1" for="s2">M</label>
+
+                                <input type="radio" class="btn-check" name="size" id="s3" autocomplete="off">
+                                <label class="btn btn-outline-dark rounded-0 px-3 py-1" for="s3">L</label>
+
+                                <input type="radio" class="btn-check" name="size" id="s4" autocomplete="off">
+                                <label class="btn btn-outline-dark rounded-0 px-3 py-1" for="s4">XL</label>
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h3 class="fw-bold mb-0">Total: ₹450.00</h3>
+                        </div>
+                        
+                        <button class="btn btn-elephoria w-100 py-3 fs-5 btn-add-cart" data-id="custom-1" data-name="Custom T-Shirt" data-price="450.00">Add Custom Piece to Cart</button>
+                    </div>
+                    
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>
