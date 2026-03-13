@@ -1,39 +1,31 @@
 /**
  * ELEPHORIA WEAR - Global JavaScript
- * Organized with Scope Protection & Global Access for Checkout
+ * Final Fix: Header/Footer Loader + EmailJS + Firebase Support
  */
 
-// Global configuration (IIFE ni bahar rakho jethi badhe access thay)
+// 1. Global configuration
 const publicKey = "cMV9WHTWRDSeU71Zr";
 const serviceId = "service_miq3boi";
 const templateId = "template_pj6s40e";
 const templateId1 = "template_hvfskjj";
 
-// 1. Initialize EmailJS Immediately
+// 2. Initialize EmailJS Immediately
 if (typeof emailjs !== 'undefined') {
     emailjs.init(publicKey);
 }
 
-// Global Checkout Function (HTML na onclick mate bahar hovi joie)
+// 3. Global Checkout Function (For WhatsApp & Email)
 function checkout(event) {
     if (event) event.preventDefault();
-
-    if (typeof emailjs === 'undefined') {
-        alert("Email service is loading, please try again.");
-        return;
-    }
+    if (typeof emailjs === 'undefined') { alert("Email service is loading..."); return; }
 
     const cart = JSON.parse(localStorage.getItem('elephoria_cart')) || [];
-    if (cart.length === 0) {
-        alert('Your cart is empty!');
-        return;
-    }
+    if (cart.length === 0) { alert('Your cart is empty!'); return; }
 
     const userEmail = prompt("Please enter your email for confirmation:");
     if (!userEmail) return;
 
     const phoneNumber = "917046575834";
-    const upiId = "7046575834@upi";
     const orderId = "ELE-" + Math.floor(Math.random() * 900000 + 100000);
 
     let subtotal = 0;
@@ -43,56 +35,36 @@ function checkout(event) {
     cart.forEach((item, index) => {
         subtotal += item.price * item.quantity;
         whatsappMessage += `${index + 1}. *${item.name}*\n   Qty: ${item.quantity} x ₹${item.price.toLocaleString('en-IN')}\n\n`;
-        orderItemsHtml += `
-            <div style="margin-bottom: 15px; border-bottom: 1px solid #f0f0f0; padding-bottom: 10px;">
-                <strong>${item.name}</strong><br>
-                QTY: ${item.quantity}<br>
-                ₹${item.price.toLocaleString('en-IN')}
-            </div>`;
+        orderItemsHtml += `<div style="margin-bottom: 15px; border-bottom: 1px solid #f0f0f0; padding-bottom: 10px;"><strong>${item.name}</strong><br>QTY: ${item.quantity}<br>₹${item.price.toLocaleString('en-IN')}</div>`;
     });
-    const gstAmount = Math.round(subtotal * 0.05); // 5% GST
+
+    const gstAmount = Math.round(subtotal * 0.05);
     const finalTotal = subtotal + gstAmount;
 
-    whatsappMessage += `Subtotal: ₹${subtotal.toLocaleString('en-IN')}\n`;
-    whatsappMessage += `GST (5%): ₹${gstAmount.toLocaleString('en-IN')}\n`;
-    whatsappMessage += `*Total Amount: ₹${finalTotal.toLocaleString('en-IN')}*\n\n`;
-
-    whatsappMessage += `*Payment Details:*\nUPI ID: *7046575834@upi*\n\n`;
+    whatsappMessage += `Subtotal: ₹${subtotal.toLocaleString('en-IN')}\nGST (5%): ₹${gstAmount.toLocaleString('en-IN')}\n*Total Amount: ₹${finalTotal.toLocaleString('en-IN')}*\n\n`;
     whatsappMessage += "Please share the screenshot after payment. Thank you!";
 
     const templateParams = {
         order_id: orderId,
         order_items_html: orderItemsHtml,
-        shipping_cost: "₹0.00",
-        tax_cost: `₹${gstAmount.toLocaleString('en-IN')} (5% GST)`, // Dynamic GST
+        shipping_cost: "FREE",
+        tax_cost: `₹${gstAmount.toLocaleString('en-IN')} (5% GST)`,
         order_total: `₹${finalTotal.toLocaleString('en-IN')}`,
         user_email: userEmail
     };
 
-    // Feedback visual
     const btnText = document.querySelector('.whatsapp-btn-text');
     if (btnText) btnText.innerText = "Processing...";
 
-    // --- WHATSAPP URL PEHLA PREPARE KARI LO ---
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(whatsappMessage)}`;
 
     emailjs.send(serviceId, templateId1, templateParams)
-        .then(() => {
-            console.log("Email Sent Successfully!");
-            // CHANGE: window.open ni jagyae window.location.href vapro
-            window.location.href = whatsappUrl;
-        })
-        .catch((error) => {
-            console.error("Email Error:", error);
-            // CHANGE: Fail thay to pan redirect thavu ja joie
-            window.location.href = whatsappUrl;
-        })
-        .finally(() => {
-            if (btnText) btnText.innerText = "Order on WhatsApp";
-        });
+        .then(() => { window.location.href = whatsappUrl; })
+        .catch(() => { window.location.href = whatsappUrl; })
+        .finally(() => { if (btnText) btnText.innerText = "Order on WhatsApp"; });
 }
 
-// Baki nu logic IIFE ma rakho jethi global namespace clean rahe
+// 4. CORE UI LOGIC (Header/Footer Loader)
 (function () {
     document.addEventListener('DOMContentLoaded', () => {
         loadComponents();
@@ -114,19 +86,33 @@ function checkout(event) {
             highlightActivePage();
             initContactForm();
             updateCartBadge(JSON.parse(localStorage.getItem('elephoria_cart')) || []);
+            
+            // Check if user is logged in (Logic inside IIFE to keep it safe)
+            checkAuthState(); 
         } catch (err) {
             console.error("Shared components error:", err);
+        }
+    }
+
+    // Auth state logic without 'Import' to prevent header hiding
+    function checkAuthState() {
+        // Ahiya tame Firebase script header ma muki hashe etle 'firebase' object malshe
+        if (typeof firebase !== 'undefined' && firebase.auth) {
+            firebase.auth().onAuthStateChanged((user) => {
+                const loginBtn = document.getElementById('loginNavItem');
+                if (user && loginBtn) {
+                    loginBtn.innerHTML = `<a class="nav-link" href="#">HELLO, ${user.email.split('@')[0].toUpperCase()}</a>`;
+                }
+            });
         }
     }
 
     function initNavbarScroll() {
         const navbar = document.getElementById('mainNav');
         if (!navbar) return;
-        const onScroll = () => {
+        window.addEventListener('scroll', () => {
             window.scrollY > 50 ? navbar.classList.add('scrolled') : navbar.classList.remove('scrolled');
-        };
-        window.addEventListener('scroll', onScroll);
-        onScroll();
+        });
     }
 
     function highlightActivePage() {
@@ -139,26 +125,17 @@ function checkout(event) {
     function initContactForm() {
         const contactForm = document.getElementById('contact-form');
         if (!contactForm) return;
-
         contactForm.addEventListener('submit', function (event) {
             event.preventDefault();
             const btn = this.querySelector('button');
-            const originalText = btn.innerText;
             btn.innerText = 'Sending...';
-
             emailjs.sendForm(serviceId, templateId, this)
-                .then(() => {
-                    alert('Message Sent!');
-                    this.reset();
-                })
-                .catch((error) => console.error('EmailJS Error:', error))
-                .finally(() => btn.innerText = originalText);
+                .then(() => { alert('Message Sent!'); this.reset(); })
+                .finally(() => btn.innerText = 'Send Message');
         });
     }
 
-    function initCart() {
-        updateCartBadge(JSON.parse(localStorage.getItem('elephoria_cart')) || []);
-    }
+    function initCart() { updateCartBadge(JSON.parse(localStorage.getItem('elephoria_cart')) || []); }
 
     function initAddToCartListeners() {
         document.addEventListener('click', (e) => {
@@ -173,13 +150,8 @@ function checkout(event) {
                 image: btn.closest('.image-wrapper')?.querySelector('img')?.src || 'assets/placeholder.png'
             };
             addToCart(product);
-            const originalText = btn.innerHTML;
             btn.innerHTML = 'ADDED!';
-            btn.classList.add('bg-dark', 'text-white');
-            setTimeout(() => {
-                btn.innerHTML = originalText;
-                btn.classList.remove('bg-dark', 'text-white');
-            }, 1000);
+            setTimeout(() => { btn.innerHTML = 'ADD TO CART'; }, 1000);
         });
     }
 
@@ -193,8 +165,7 @@ function checkout(event) {
 
     function updateCartBadge(cart) {
         const badge = document.getElementById('cartBadgeCount');
-        if (!badge) return;
-        badge.innerText = cart.reduce((sum, item) => sum + item.quantity, 0);
+        if (badge) badge.innerText = cart.reduce((sum, item) => sum + item.quantity, 0);
     }
 
     function handleSearch() {
