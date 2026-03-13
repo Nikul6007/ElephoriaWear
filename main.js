@@ -207,15 +207,3 @@ function checkout(event) {
         }
     }
 })();
-import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-
-// Login function
-async function loginUser(email, password) {
-    try {
-        const userCredential = await signInWithEmailAndPassword(auth, email, password);
-        alert("Logged in successfully!");
-        location.reload(); // Page reload karo jethi header update thay
-    } catch (error) {
-        alert("Invalid email or password.");
-    }
-}
