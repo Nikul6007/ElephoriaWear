@@ -1,6 +1,6 @@
 /**
  * ELEPHORIA WEAR - Global JavaScript
- * Final Fix: Header/Footer Loader + EmailJS + Firebase Support
+ * Final Fix: Header/Footer Loader + EmailJS + Firebase Support + User Specific Cart
  */
 
 // 1. Global configuration
@@ -14,12 +14,21 @@ if (typeof emailjs !== 'undefined') {
     emailjs.init(publicKey);
 }
 
-// 3. Global Checkout Function (For WhatsApp & Email)
+// 3. Helper: Dynamic Cart Key (User Based)
+function getCartKey() {
+    if (typeof firebase !== 'undefined' && firebase.auth().currentUser) {
+        return `cart_${firebase.auth().currentUser.uid}`;
+    }
+    return `cart_guest`;
+}
+
+// 4. Global Checkout Function
 function checkout(event) {
     if (event) event.preventDefault();
     if (typeof emailjs === 'undefined') { alert("Email service is loading..."); return; }
 
-    const cart = JSON.parse(localStorage.getItem('elephoria_cart')) || [];
+    const cartKey = getCartKey();
+    const cart = JSON.parse(localStorage.getItem(cartKey)) || [];
     if (cart.length === 0) { alert('Your cart is empty!'); return; }
 
     const userEmail = prompt("Please enter your email for confirmation:");
@@ -41,7 +50,7 @@ function checkout(event) {
     const gstAmount = Math.round(subtotal * 0.05);
     const finalTotal = subtotal + gstAmount;
 
-    whatsappMessage += `Subtotal: ₹${subtotal.toLocaleString('en-IN')}\nGST (5%): ₹${gstAmount.toLocaleString('en-IN')}\n*Total Amount: ₹${finalTotal.toLocaleString('en-IN')}*\n\n`;
+    whatsappMessage += `Subtotal: ₹${subtotal.toLocaleString('en-IN')}\nGST (5%): ₹${gstAmount.toLocaleString('en-IN')}\nShipping: FREE\n*Total Amount: ₹${finalTotal.toLocaleString('en-IN')}*\n\n`;
     whatsappMessage += "Please share the screenshot after payment. Thank you!";
 
     const templateParams = {
@@ -64,11 +73,10 @@ function checkout(event) {
         .finally(() => { if (btnText) btnText.innerText = "Order on WhatsApp"; });
 }
 
-// 4. CORE UI LOGIC (Header/Footer Loader)
+// 5. CORE UI LOGIC (IIFE)
 (function () {
     document.addEventListener('DOMContentLoaded', () => {
         loadComponents();
-        initCart();
         initAddToCartListeners();
         handleSearch();
     });
@@ -85,28 +93,71 @@ function checkout(event) {
             initNavbarScroll();
             highlightActivePage();
             initContactForm();
-            updateCartBadge(JSON.parse(localStorage.getItem('elephoria_cart')) || []);
             
-            // Check if user is logged in (Logic inside IIFE to keep it safe)
+            // Initial Cart Sync
+            initCart();
+            
+            // Check Firebase Auth State
             checkAuthState(); 
         } catch (err) {
             console.error("Shared components error:", err);
         }
     }
 
-    // Auth state logic without 'Import' to prevent header hiding
     function checkAuthState() {
-        // Ahiya tame Firebase script header ma muki hashe etle 'firebase' object malshe
         if (typeof firebase !== 'undefined' && firebase.auth) {
             firebase.auth().onAuthStateChanged((user) => {
                 const loginBtn = document.getElementById('loginNavItem');
-                if (user && loginBtn) {
-                    loginBtn.innerHTML = `<a class="nav-link" href="#">HELLO, ${user.email.split('@')[0].toUpperCase()}</a>`;
+                if (user) {
+                    if (loginBtn) {
+                        loginBtn.innerHTML = `<a class="nav-link" href="#">HELLO, ${user.email.split('@')[0].toUpperCase()}</a>`;
+                    }
                 }
+                // Refresh Cart Badge when user logs in/out
+                initCart();
             });
         }
     }
 
+    function initCart() {
+        const cartKey = getCartKey();
+        const cart = JSON.parse(localStorage.getItem(cartKey)) || [];
+        updateCartBadge(cart);
+    }
+
+    function initAddToCartListeners() {
+        document.addEventListener('click', (e) => {
+            const btn = e.target.closest('.btn-add-cart');
+            if (!btn) return;
+            e.preventDefault();
+            const product = {
+                id: btn.getAttribute('data-id'),
+                name: btn.getAttribute('data-name'),
+                price: parseFloat(btn.getAttribute('data-price')),
+                quantity: 1,
+                image: btn.closest('.image-wrapper')?.querySelector('img')?.src || 'assets/placeholder.png'
+            };
+            addToCart(product);
+            btn.innerHTML = 'ADDED!';
+            setTimeout(() => { btn.innerHTML = 'ADD TO CART'; }, 1000);
+        });
+    }
+
+    function addToCart(product) {
+        const cartKey = getCartKey();
+        let cart = JSON.parse(localStorage.getItem(cartKey)) || [];
+        const idx = cart.findIndex(item => item.id === product.id);
+        idx > -1 ? cart[idx].quantity += 1 : cart.push(product);
+        localStorage.setItem(cartKey, JSON.stringify(cart));
+        updateCartBadge(cart);
+    }
+
+    function updateCartBadge(cart) {
+        const badge = document.getElementById('cartBadgeCount');
+        if (badge) badge.innerText = cart.reduce((sum, item) => sum + item.quantity, 0);
+    }
+
+    // Navbar, Search, and Contact logic
     function initNavbarScroll() {
         const navbar = document.getElementById('mainNav');
         if (!navbar) return;
@@ -133,39 +184,6 @@ function checkout(event) {
                 .then(() => { alert('Message Sent!'); this.reset(); })
                 .finally(() => btn.innerText = 'Send Message');
         });
-    }
-
-    function initCart() { updateCartBadge(JSON.parse(localStorage.getItem('elephoria_cart')) || []); }
-
-    function initAddToCartListeners() {
-        document.addEventListener('click', (e) => {
-            const btn = e.target.closest('.btn-add-cart');
-            if (!btn) return;
-            e.preventDefault();
-            const product = {
-                id: btn.getAttribute('data-id'),
-                name: btn.getAttribute('data-name'),
-                price: parseFloat(btn.getAttribute('data-price')),
-                quantity: 1,
-                image: btn.closest('.image-wrapper')?.querySelector('img')?.src || 'assets/placeholder.png'
-            };
-            addToCart(product);
-            btn.innerHTML = 'ADDED!';
-            setTimeout(() => { btn.innerHTML = 'ADD TO CART'; }, 1000);
-        });
-    }
-
-    function addToCart(product) {
-        let cart = JSON.parse(localStorage.getItem('elephoria_cart')) || [];
-        const idx = cart.findIndex(item => item.id === product.id);
-        idx > -1 ? cart[idx].quantity += 1 : cart.push(product);
-        localStorage.setItem('elephoria_cart', JSON.stringify(cart));
-        updateCartBadge(cart);
-    }
-
-    function updateCartBadge(cart) {
-        const badge = document.getElementById('cartBadgeCount');
-        if (badge) badge.innerText = cart.reduce((sum, item) => sum + item.quantity, 0);
     }
 
     function handleSearch() {
